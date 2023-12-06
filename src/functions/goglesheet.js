@@ -173,6 +173,7 @@ const getUserAndPartCell = async (partNumber) => {
 };
 
 export const searchPartNumber = async (partNumber) => {
+  console.log(partNumber, "number");
   try {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_API_KEY}`;
 
