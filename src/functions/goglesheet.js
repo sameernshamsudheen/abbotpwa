@@ -92,12 +92,16 @@ const alphabets = [
 //   }
 // };
 
-const accessToken = localStorage.getItem("access_token");
+const getHeaders = () => {
+  const accessToken = localStorage.getItem("access_token");
 
-const headers = {
-  Authorization: `Bearer ${accessToken}`,
-  Accept: "application/json",
-  "Content-Type": "application/json",
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+
+  return headers;
 };
 
 const getUserInfo = () => {
@@ -114,7 +118,7 @@ const getSheetValues = async () => {
   try {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_API_KEY}`;
 
-    const response = await axios.get(url, { headers });
+    const response = await axios.get(url, getHeaders());
 
     const values = response.data.values || [];
 
@@ -128,18 +132,14 @@ const getSheetValues = async () => {
 const batchUpdateCellValue = async (values) => {
   try {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchUpdate?key=${GOOGLE_API_KEY}`;
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
+
     const data = {
       spreadsheetId: SHEET_ID,
       valueInputOption: "USER_ENTERED",
       data: values,
     };
 
-    return await axios.post(url, data, { headers });
+    return await axios.post(url, data, getHeaders());
   } catch (error) {
     throw new Error("Something went wrong while updating");
   }
