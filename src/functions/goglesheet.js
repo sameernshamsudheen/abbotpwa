@@ -176,7 +176,7 @@ export const searchPartNumber = async (partNumber) => {
   try {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_API_KEY}`;
 
-    const response = await axios.get(url, { headers });
+    const response = await axios.get(url, getHeaders());
 
     const values = response.data.values || [];
 
