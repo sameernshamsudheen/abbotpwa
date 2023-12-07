@@ -115,6 +115,7 @@ const getUserAndPartCell = async (partNumber) => {
 };
 
 export const searchPartNumber = async (partNumber) => {
+  console.log(partNumber, "number");
   try {
     const accessToken = localStorage.getItem("access_token");
 
