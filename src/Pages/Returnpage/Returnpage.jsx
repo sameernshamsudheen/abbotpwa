@@ -1,33 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
 import { useState } from "react";
-import { searchPartNumber } from "../../functions/goglesheet";
-import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Navbar from "../../components/Navbar/Navbar";
+import { returnPart } from "../../functions/goglesheet";
 import QRScanner from "../../components/QRScanner/QRScanner";
 
-const HompPage = () => {
-  const navigate = useNavigate();
-
+export default function Returnpage() {
   const [partNumber, setPartNumber] = useState("");
   const [quantity, setQuantity] = useState("");
 
   const [isScanOpen, setIsScanOpen] = useState(false);
 
-  const handleSearch = async () => {
-    try {
-      const res = await searchPartNumber(partNumber);
-      setQuantity(res.available_quantity);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleRemove = () => {
-    navigate("/home/remove");
-  };
-
-  const handleReturn = () => {
-    navigate("/home/return");
+  const handleReturn = async () => {
+    console.log(await returnPart(partNumber, quantity));
   };
 
   const handleScanClose = () => {
@@ -38,6 +22,7 @@ const HompPage = () => {
     <>
       <Navbar />
       <div className="container my-5 p-5">
+        <h3>Return part</h3>
         <div className="row g-4">
           <div className="col-12">
             <input
@@ -50,27 +35,14 @@ const HompPage = () => {
             />
           </div>
           <div className="col-12">
-            <button
-              onClick={handleSearch}
-              className="btn btn-success rounded-pill w-100"
-            >
-              Search
-            </button>
-          </div>
-          <div className="col-12">
             <input
               type="text"
               className="form-control"
               id="inputEmail4"
+              placeholder="Quantity"
               value={quantity}
-              onChange={() => {}}
-              placeholder="Qty"
+              onChange={(e) => setQuantity(e.target.value)}
             />
-          </div>
-          <div className="col-12">
-            <Button variant="danger" className="w-100" onClick={handleRemove}>
-              Remove
-            </Button>
           </div>
           <div className="col-12">
             <Button variant="primary" className="w-100" onClick={handleReturn}>
@@ -95,6 +67,4 @@ const HompPage = () => {
       />
     </>
   );
-};
-
-export default HompPage;
+}

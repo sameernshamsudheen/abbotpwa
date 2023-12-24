@@ -1,14 +1,7 @@
-import React from "react";
-import HompPage from "./Pages/Homepage/HompPage";
-import LoginPage from "./Pages/LoginPage/LoginPage";
-import { Routes } from "./Routes/Router";
+import { Router } from "./Routes/Router";
 
 function App() {
-  return (
-    <>
-      <Routes />
-    </>
-  );
+  return <Router />;
 }
 
 export default App;

@@ -1,16 +1,11 @@
-import { useGoogleLogin, googleLogout } from "@react-oauth/google";
-
-import {
-  // getAllData,
-  // getCellValue,
-  // updateCellValue,
-  searchPartNumber,
-  removePart,
-  returnPart,
-} from "../../functions/goglesheet";
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "../../App.css";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const googleLogin = useGoogleLogin({
     scope: "https://www.googleapis.com/auth/spreadsheets",
     onSuccess: async (tokenResponse) => {
@@ -24,44 +19,27 @@ const LoginPage = () => {
 
       localStorage.setItem("user_info", JSON.stringify(userInfo.data));
       console.log(userInfo.data);
+
+      navigate("/home");
     },
     onError: (errorResponse) => console.log(errorResponse),
   });
 
   return (
-    <>
-      <button onClick={googleLogin}>Google Login 🚀</button>
-      <button onClick={googleLogout}>Logout</button>
-
-      {/* <button onClick={() => getAllData()}>GET all data</button>
-      <button onClick={() => getCellValue("Sheet1!A1")}>GET cell data</button>
-      <button onClick={() => updateCellValue("Sheet1!A1", "new")}>
-        UPDATE cell value
-      </button> */}
-      <div>
-        <button
-          onClick={async () =>
-            console.log(await searchPartNumber("8-203835-01"))
-          }
-        >
-          SEARCH part number 8-203835-01
-        </button>
-        <button
-          onClick={async () =>
-            console.log(await removePart("8-203835-01", "2"))
-          }
-        >
-          REMOVE
-        </button>
-        <button
-          onClick={async () =>
-            console.log(await returnPart("8-203834-02", "1"))
-          }
-        >
-          RETURN
-        </button>
+    <div className="container vh-100 LoginPage">
+      <div className="row h-100 justify-content-center align-items-center">
+        <div className="col-md-6">
+          <div className="text-center text-light mb-4">
+            <h2>Spare Part Manager</h2>
+          </div>
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={googleLogin}>
+              Sign in with Google
+            </button>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
