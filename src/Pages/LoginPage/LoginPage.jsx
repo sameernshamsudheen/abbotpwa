@@ -26,7 +26,7 @@ const LoginPage = () => {
   });
 
   return (
-    <div className="container vh-100 LoginPage">
+    <div className="vh-100 LoginPage">
       <div className="row h-100 justify-content-center align-items-center">
         <div className="col-md-6">
           <div className="text-center text-light mb-4">
