@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Navbar from "../../components/Navbar/Navbar";
 import { returnPart } from "../../functions/goglesheet";
 import QRScanner from "../../components/QRScanner/QRScanner";
+import toast from "react-hot-toast";
 
 export default function Returnpage() {
   const [partNumber, setPartNumber] = useState("");
@@ -11,7 +12,17 @@ export default function Returnpage() {
   const [isScanOpen, setIsScanOpen] = useState(false);
 
   const handleReturn = async () => {
-    console.log(await returnPart(partNumber, quantity));
+    try {
+      if (partNumber && quantity) {
+        const res = await returnPart(partNumber, quantity);
+        toast.success(res);
+        setQuantity("");
+      } else {
+        toast.error("Part number or quantity is missing!");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleScanClose = () => {
@@ -22,7 +33,7 @@ export default function Returnpage() {
     <>
       <Navbar />
       <div className="container my-5 p-5">
-        <h3>Return part</h3>
+        <h3 className="mb-4">Return Part</h3>
         <div className="row g-4">
           <div className="col-12">
             <input
@@ -55,7 +66,7 @@ export default function Returnpage() {
               className="btn btn-success rounded-pill w-100"
               onClick={() => setIsScanOpen(true)}
             >
-              Scan your Product
+              Scan Part Number
             </button>
           </div>
         </div>

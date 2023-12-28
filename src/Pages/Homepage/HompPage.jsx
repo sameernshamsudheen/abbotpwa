@@ -4,6 +4,7 @@ import { useState } from "react";
 import { searchPartNumber } from "../../functions/goglesheet";
 import { Button } from "react-bootstrap";
 import QRScanner from "../../components/QRScanner/QRScanner";
+import toast from "react-hot-toast";
 
 const HompPage = () => {
   const navigate = useNavigate();
@@ -17,8 +18,11 @@ const HompPage = () => {
     try {
       const res = await searchPartNumber(partNumber);
       setQuantity(res.available_quantity);
+      toast.success("Part number found!");
     } catch (error) {
       console.log(error);
+      setQuantity("");
+      toast.error(error.message);
     }
   };
 
@@ -83,7 +87,7 @@ const HompPage = () => {
               className="btn btn-success rounded-pill w-100"
               onClick={() => setIsScanOpen(true)}
             >
-              Scan your Product
+              Scan Part Number
             </button>
           </div>
         </div>

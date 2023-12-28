@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Navbar from "../../components/Navbar/Navbar";
 import { removePart } from "../../functions/goglesheet";
 import QRScanner from "../../components/QRScanner/QRScanner";
+import toast from "react-hot-toast";
 
 export default function Removepage() {
   const [partNumber, setPartNumber] = useState("");
@@ -11,7 +12,17 @@ export default function Removepage() {
   const [isScanOpen, setIsScanOpen] = useState(false);
 
   const handleRemove = async () => {
-    console.log(await removePart(partNumber, quantity));
+    try {
+      if (partNumber && quantity) {
+        const res = await removePart(partNumber, quantity);
+        toast.success(res);
+        setQuantity("");
+      } else {
+        toast.error("Part number or quantity is missing!");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleScanClose = () => {
@@ -22,7 +33,7 @@ export default function Removepage() {
     <>
       <Navbar />
       <div className="container my-5 p-5">
-        <h3>Remove part</h3>
+        <h3 className="mb-4">Remove Part</h3>
         <div className="row g-4">
           <div className="col-12">
             <input
@@ -53,7 +64,7 @@ export default function Removepage() {
               className="btn btn-success rounded-pill w-100"
               onClick={() => setIsScanOpen(true)}
             >
-              Scan your Product
+              Scan Part Number
             </button>
           </div>
         </div>

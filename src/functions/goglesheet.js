@@ -1,5 +1,5 @@
-import axios from "axios";
 import { GOOGLE_API_KEY, IS_DEV, SHEET_ID, SHEET_NAME } from "../env";
+import axiosInstance from "./axios";
 
 const alphabets = [
   "A",
@@ -42,17 +42,8 @@ const getUserInfo = () => {
 
 const getSheetValues = async () => {
   try {
-    const accessToken = localStorage.getItem("access_token");
-
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
-
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_API_KEY}`;
-
-    const response = await axios.get(url, { headers });
+    const url = `${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_API_KEY}`;
+    const response = await axiosInstance.get(url);
 
     const values = response.data.values || [];
 
@@ -65,15 +56,7 @@ const getSheetValues = async () => {
 
 const batchUpdateCellValue = async (values) => {
   try {
-    const accessToken = localStorage.getItem("access_token");
-
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
-
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchUpdate?key=${GOOGLE_API_KEY}`;
+    const url = `${SHEET_ID}/values:batchUpdate?key=${GOOGLE_API_KEY}`;
 
     const data = {
       spreadsheetId: SHEET_ID,
@@ -81,7 +64,7 @@ const batchUpdateCellValue = async (values) => {
       data: values,
     };
 
-    return await axios.post(url, data, { headers });
+    return await axiosInstance.post(url, data);
   } catch (error) {
     throw new Error("Something went wrong while updating");
   }
@@ -117,17 +100,9 @@ const getUserAndPartCell = async (partNumber) => {
 export const searchPartNumber = async (partNumber) => {
   console.log(partNumber, "number");
   try {
-    const accessToken = localStorage.getItem("access_token");
+    const url = `${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_API_KEY}`;
 
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
-
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_API_KEY}`;
-
-    const response = await axios.get(url, { headers });
+    const response = await axiosInstance.get(url);
 
     const values = response.data.values || [];
 
@@ -144,7 +119,7 @@ export const searchPartNumber = async (partNumber) => {
     }
   } catch (error) {
     console.log(error.message);
-    return error.message;
+    throw new Error(error.message);
   }
 };
 
@@ -167,7 +142,7 @@ export const removePart = async (partNumber, qnty) => {
     if (response) return "Remove successfull";
   } catch (error) {
     console.log(error.message);
-    return error.message;
+    throw new Error(error.message);
   }
 };
 
@@ -189,6 +164,6 @@ export const returnPart = async (partNumber, qnty) => {
     if (response) return "Return successfull";
   } catch (error) {
     console.log(error.message);
-    return error.message;
+    throw new Error(error.message);
   }
 };

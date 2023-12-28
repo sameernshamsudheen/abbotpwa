@@ -1,6 +1,6 @@
 import { googleLogout } from "@react-oauth/google";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import icon from "../../assets/icon.png";
 
 const Navbar = () => {
@@ -11,7 +11,9 @@ const Navbar = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user_info"));
     console.log(user);
-    setUserInfo(user.name);
+    if (user) {
+      setUserInfo(user?.name);
+    }
   }, []);
 
   const handleLogout = () => {
@@ -22,7 +24,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/home">
+        <NavLink className="navbar-brand" to="/home">
           <img
             src={icon}
             alt=""
@@ -31,7 +33,7 @@ const Navbar = () => {
             className="me-2"
           />
           Spare Part Manager
-        </a>
+        </NavLink>
         <button
           className="navbar-toggler"
           type="button"
@@ -46,9 +48,18 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <NavLink
+                className="nav-link active"
+                aria-current="page"
+                to={"/home"}
+              >
+                Home
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link active" aria-current="page">
                 {userInfo}
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
               <a
