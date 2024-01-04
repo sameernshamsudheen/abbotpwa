@@ -38,6 +38,9 @@ function QRScanner({ show, handleClose, setPartNumber }) {
           style={previewStyle}
           onError={handleError}
           onScan={handleScan}
+          constraints={{
+            video: { facingMode: "environment" },
+          }}
         />
       </Modal.Body>
       <Modal.Footer>
