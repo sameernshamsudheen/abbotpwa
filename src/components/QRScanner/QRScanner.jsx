@@ -1,24 +1,29 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-// import { QrScanner } from "@yudiel/react-qr-scanner";
-import QrReader from "react-qr-scanner";
+// import QrReader from "react-qr-scanner";
+import BarcodeScanner from "../BarcodeScanner/BarcodeScanner";
 
 function QRScanner({ show, handleClose, setPartNumber }) {
-  const previewStyle = {
-    height: 240,
-    width: 320,
-  };
+  // const previewStyle = {
+  //   height: 240,
+  //   width: 320,
+  // };
 
-  function handleScan(data) {
-    console.log(data);
-    if (data) {
-      setPartNumber(data.text);
-      handleClose();
-    }
-  }
-  function handleError(err) {
-    console.error(err);
-  }
+  // function handleScan(data) {
+  //   console.log(data);
+  //   if (data) {
+  //     setPartNumber(data.text);
+  //     handleClose();
+  //   }
+  // }
+  // function handleError(err) {
+  //   console.error(err);
+  // }
+
+  const onNewScanResult = (decodedText) => {
+    setPartNumber(decodedText);
+    handleClose();
+  };
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -26,18 +31,20 @@ function QRScanner({ show, handleClose, setPartNumber }) {
         <Modal.Title>Scan part</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* <QrScanner
-          onDecode={(result) => {
-            setPartNumber(result);
-            handleClose();
-          }}
-          onError={(error) => console.log(error?.message)}
-        /> */}
-        <QrReader
+        {/* <QrReader
           delay={100}
           style={previewStyle}
           onError={handleError}
           onScan={handleScan}
+           constraints={{
+            video: { facingMode: "environment" },
+          }}
+        />  */}
+        <BarcodeScanner
+          fps={10}
+          qrbox={250}
+          disableFlip={false}
+          qrCodeSuccessCallback={onNewScanResult}
         />
       </Modal.Body>
       <Modal.Footer>
