@@ -90,6 +90,9 @@ const getUserAndPartCell = async (partNumber) => {
     const row = values.findIndex((entry) => entry[1] === partNumber);
     if (row < 0) throw new Error("Cannot find part number!");
 
+    const removeValue = parseInt(values[row][col]) || 0;
+    const returnValue = parseInt(values[row][col + 1]) || 0;
+
     // Find the col with the matching string "available qty"
     const avlQtyCol = values[0].findIndex((element) =>
       element.toLowerCase().includes("available qty")
@@ -99,7 +102,7 @@ const getUserAndPartCell = async (partNumber) => {
 
     const avlQtyValue = parseInt(values[row][avlQtyCol]);
 
-    return { col, row, avlQtyCol, avlQtyValue };
+    return { col, row, removeValue, returnValue, avlQtyCol, avlQtyValue };
   } catch (error) {
     throw new Error(error.message);
   }
@@ -145,9 +148,8 @@ export const searchPartNumber = async (partNumber) => {
 
 export const removePart = async (partNumber, qnty) => {
   try {
-    const { col, row, avlQtyCol, avlQtyValue } = await getUserAndPartCell(
-      partNumber
-    );
+    const { col, row, removeValue, avlQtyCol, avlQtyValue } =
+      await getUserAndPartCell(partNumber);
 
     const colIndex = alphabets[col];
     const avlQtyIndex = alphabets[avlQtyCol];
@@ -162,7 +164,7 @@ export const removePart = async (partNumber, qnty) => {
       //update remove cell with quantity
       {
         range: cellNumber,
-        values: [[qnty]],
+        values: [[removeValue + parseInt(qnty)]],
       },
       //update cell with avaliable quantity
       {
@@ -179,9 +181,8 @@ export const removePart = async (partNumber, qnty) => {
 
 export const returnPart = async (partNumber, qnty) => {
   try {
-    const { col, row, avlQtyCol, avlQtyValue } = await getUserAndPartCell(
-      partNumber
-    );
+    const { col, row, returnValue, avlQtyCol, avlQtyValue } =
+      await getUserAndPartCell(partNumber);
 
     const colIndex = alphabets[col + 1];
     const avlQtyIndex = alphabets[avlQtyCol];
@@ -196,7 +197,7 @@ export const returnPart = async (partNumber, qnty) => {
       //update return cell with quantity
       {
         range: cellNumber,
-        values: [[qnty]],
+        values: [[returnValue + parseInt(qnty)]],
       },
       //update cell with avaliable quantity
       {

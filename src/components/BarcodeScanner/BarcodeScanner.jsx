@@ -26,8 +26,6 @@ function BarcodeScanner(props) {
 
   useEffect(() => {
     if (!effectRan.current) {
-      console.log("MOUNT");
-
       const config = createConfig(props);
       const verbose = props.verbose === true;
 
@@ -42,7 +40,6 @@ function BarcodeScanner(props) {
       );
 
       return () => {
-        console.log("CLEAR");
         // effectRan.current = true;
         html5QrcodeScanner.clear().catch((error) => {
           console.error("Failed to clear html5QrcodeScanner. ", error);

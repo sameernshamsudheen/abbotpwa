@@ -13,7 +13,7 @@ export default function Returnpage() {
 
   const handleReturn = async () => {
     try {
-      if (partNumber && quantity) {
+      if (partNumber && quantity > 0) {
         const res = await returnPart(partNumber, quantity);
         toast.success(res);
         setQuantity("");
@@ -47,7 +47,7 @@ export default function Returnpage() {
           </div>
           <div className="col-12">
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="inputEmail4"
               placeholder="Quantity"

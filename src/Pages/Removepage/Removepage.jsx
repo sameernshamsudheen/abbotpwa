@@ -13,7 +13,7 @@ export default function Removepage() {
 
   const handleRemove = async () => {
     try {
-      if (partNumber && quantity) {
+      if (partNumber && quantity > 0) {
         const res = await removePart(partNumber, quantity);
         toast.success(res);
         setQuantity("");
@@ -46,7 +46,7 @@ export default function Removepage() {
           </div>
           <div className="col-12">
             <input
-              type="text"
+              type="number"
               className="form-control"
               placeholder="Quantity"
               value={quantity}
